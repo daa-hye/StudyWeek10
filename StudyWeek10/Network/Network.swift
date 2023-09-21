@@ -31,4 +31,17 @@ class Network {
                 }
         }
     }
+
+    func requestConvertible<T: Decodable>(type: T.Type, api: Router, completion: @escaping (Result<T, UnsplashError>) -> Void) {
+        AF.request(api).responseDecodable(of: T.self) { response in
+                switch response.result {
+                case .success(let data):
+                    completion(.success(data))
+                case.failure(_):
+                    let statusCode = response.response?.statusCode ?? UnsplashError.invalidServer.rawValue
+                    guard let error = UnsplashError(rawValue: statusCode) else { return }
+                    completion(.failure(error))
+                }
+        }
+    }
 }
