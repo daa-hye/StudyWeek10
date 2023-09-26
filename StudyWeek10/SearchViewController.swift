@@ -34,13 +34,35 @@ class SearchViewController: UIViewController {
         }
     }
 
+    func configureCollectionView() -> UICollectionViewCompositionalLayout {
 
-    func configureCollectionView() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 50, height: 50)
-        layout.scrollDirection = .vertical
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/4), heightDimension: .fractionalWidth(1.0))
+
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(80)) // absolute-절대적 높이 지정 , fractional-비율?
+
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 4)
+        group.interItemSpacing = .fixed(10)
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+
+        let configure = UICollectionViewCompositionalLayoutConfiguration()
+        configure.scrollDirection = .horizontal
+
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        layout.configuration = configure
+
         return layout
     }
+
+//    func configureCollectionView() -> UICollectionViewLayout {
+//        let layout = UICollectionViewFlowLayout()
+//        layout.itemSize = CGSize(width: 50, height: 50)
+//        layout.scrollDirection = .vertical
+//        return layout
+//    }
 
     func configureDataSource() {
 
